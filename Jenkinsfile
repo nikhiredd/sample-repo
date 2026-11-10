@@ -1,0 +1,1 @@
+pipeline { agent any stages { stage('Install'){steps{sh 'npm ci'}} stage('Browsers'){steps{sh 'npx playwright install --with-deps'}} stage('Generate'){steps{sh 'npx bddgen'}} stage('Test'){steps{sh 'npx playwright test'}} } }

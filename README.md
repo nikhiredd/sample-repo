@@ -1,0 +1,1 @@
+Run: npm install && npx playwright install && npx bddgen && npx playwright test

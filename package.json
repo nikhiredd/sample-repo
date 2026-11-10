@@ -1,0 +1,15 @@
+{
+    "name": "playwright-bdd",
+    "scripts": {
+        "bddgen": "bddgen",
+        "test": "playwright test",
+        "smoke": "playwright test --grep @smoke"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.65.0",
+        "playwright-bdd": "^9.2.1",
+        "dotenv": "^17.0.0",
+        "allure-playwright": "^3.14.0",
+        "typescript": "^5.0.0"
+    }
+}
