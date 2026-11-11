@@ -1,1 +1,51 @@
-pipeline { agent any stages { stage('Install'){steps{sh 'npm ci'}} stage('Browsers'){steps{sh 'npx playwright install --with-deps'}} stage('Generate'){steps{sh 'npx bddgen'}} stage('Test'){steps{sh 'npx playwright test'}} } }
+
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Install Playwright Browsers') {
+            steps {
+                sh 'npx playwright install chromium'
+            }
+        }
+
+        stage('Generate BDD Tests') {
+            steps {
+                sh 'npx bddgen'
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                sh 'npx playwright test'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution completed'
+        }
+
+        success {
+            echo 'BDD tests passed!'
+        }
+
+        failure {
+            echo 'BDD tests failed!'
+        }
+    }
+}
