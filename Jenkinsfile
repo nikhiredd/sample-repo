@@ -2,11 +2,40 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        CI = "true"
+    }
+
+    options {
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
+                echo 'Checking out code from GitHub'
                 checkout scm
+            }
+        }
+
+        stage('Check Node and NPM') {
+            steps {
+                sh '''
+                    echo "Node version:"
+                    node --version
+
+                    echo "NPM version:"
+                    npm --version
+
+                    echo "Node location:"
+                    which node
+
+                    echo "NPM location:"
+                    which npm
+                '''
             }
         }
 
@@ -16,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('Install Playwright Browsers') {
+        stage('Install Playwright Browser') {
             steps {
                 sh 'npx playwright install chromium'
             }
@@ -28,35 +57,30 @@ pipeline {
             }
         }
 
-        stage('Run Playwright Tests') {
+        stage('Run Playwright BDD Tests') {
             steps {
                 sh 'npx playwright test'
             }
         }
-        stage('Check Jenkins Environment') {
-    steps {
-        sh '''
-            echo "PATH=$PATH"
-            which node || true
-            which npm || true
-            node --version || true
-            npm --version || true
-        '''
-    }
-}
     }
 
     post {
         always {
+            archiveArtifacts(
+                artifacts: 'playwright-report/**,test-results/**',
+                allowEmptyArchive: true
+            )
+
             echo 'Pipeline execution completed'
         }
 
         success {
-            echo 'BDD tests passed!'
+            echo 'Playwright BDD tests passed!'
         }
 
         failure {
-            echo 'BDD tests failed!'
+            echo 'Playwright BDD tests failed! Check Console Output.'
         }
     }
 }
+
