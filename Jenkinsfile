@@ -33,6 +33,17 @@ pipeline {
                 sh 'npx playwright test'
             }
         }
+        stage('Check Jenkins Environment') {
+    steps {
+        sh '''
+            echo "PATH=$PATH"
+            which node || true
+            which npm || true
+            node --version || true
+            npm --version || true
+        '''
+    }
+}
     }
 
     post {
