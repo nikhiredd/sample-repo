@@ -8,7 +8,6 @@ pipeline {
     }
 
     options {
-        timestamps()
         timeout(time: 30, unit: 'MINUTES')
     }
 
@@ -16,7 +15,6 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out code from GitHub'
                 checkout scm
             }
         }
@@ -24,16 +22,9 @@ pipeline {
         stage('Check Node and NPM') {
             steps {
                 sh '''
-                    echo "Node version:"
                     node --version
-
-                    echo "NPM version:"
                     npm --version
-
-                    echo "Node location:"
                     which node
-
-                    echo "NPM location:"
                     which npm
                 '''
             }
@@ -57,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Run Playwright BDD Tests') {
+        stage('Run Playwright Tests') {
             steps {
                 sh 'npx playwright test'
             }
@@ -70,8 +61,6 @@ pipeline {
                 artifacts: 'playwright-report/**,test-results/**',
                 allowEmptyArchive: true
             )
-
-            echo 'Pipeline execution completed'
         }
 
         success {
@@ -79,8 +68,10 @@ pipeline {
         }
 
         failure {
-            echo 'Playwright BDD tests failed! Check Console Output.'
+            echo 'Playwright BDD tests failed!'
         }
     }
 }
+
+
 
