@@ -17,4 +17,5 @@ When('customer enters valid credentials', async ({ page }) => {
 
 Then('customer should navigate to dashboard', async ({ page }) => {
   await expect(page).toHaveURL(/overview.htm/);
+  
 });
