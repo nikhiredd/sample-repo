@@ -1,1 +1,10 @@
-import dotenv from "dotenv"; dotenv.config(); export const env={baseUrl:process.env.BASE_URL||"https://parabank.parasoft.com/parabank/index.htm",username:process.env.USERNAME||"",password:process.env.PASSWORD||""};
+
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+export const env = {
+    baseUrl: process.env.BASE_URL || '',
+    username: process.env.USERNAME || '',
+    password: process.env.PASSWORD || ''
+};
